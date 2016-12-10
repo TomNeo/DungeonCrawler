@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="10" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32">
+  <image source="tileset.png" width="128" height="32"/>
+  <tile id="1">
+   <properties>
+    <property name="ghost" value=""/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="exit" value=""/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="key" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eJyVkVEKACAIQ6fd/879FMjYRIUQbHtqBYAQ50e+XGtRMnv4DsLHOo7KzEGfCX+jcx7eye2QpFHv1c2k+K7/ZKbtf3WMYxhcu2ZoAFc=
+  </data>
+ </layer>
+ <layer name="Tile Layer 2" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYmBgYBqCmGUQuGEkYgYi1QEAZz8BLQ==
+  </data>
+ </layer>
+</map>

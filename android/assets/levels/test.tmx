@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="15" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="dungeon_tiles_compact_and_varied20x20" tilewidth="16" tileheight="16">
+  <image source="dungeon_tiles_compact_and_varied20x20.png" width="336" height="104"/>
+ </tileset>
+ <tileset firstgid="127" name="ring" tilewidth="16" tileheight="16">
+  <image source="ring.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="128" name="key" tilewidth="16" tileheight="16">
+  <image source="key.png" width="16" height="16"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eJx1kQEOgjAMRYcO8QQEUU9gUMYZUE9ADO7+9+Av/p80yyR5aVfa7rd7ut9XAU8asKM98n8LAjiBATxABF/aEdTgzPMC7qADe8Yc7ZV5OqfeH+J5T+AdI3UkeuarR8lXP9UMWX1Fnc5ojQVfmgJ79KbGGd/W3cD6J0/782YO7dXqUb+W92oXXaZB/dOe52z2tZCnuS7gBSbGDvRzvaqJJqZ3lqa0n8acFXuDDSDpF5w=
+  </data>
+ </layer>
+ <layer name="Tile Layer 2" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4D6AAACWAAB
+  </data>
+ </layer>
+ <layer name="Tile Layer 3" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4D6AAACWAAB
+  </data>
+ </layer>
+ <layer name="Tile Layer 4" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4D6AAACWAAB
+  </data>
+ </layer>
+</map>
