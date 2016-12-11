@@ -31,16 +31,23 @@ public class DungeonCrawler implements ApplicationListener {
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
 	private TextureRegion playerTexture, openSpotTexture, ghostTexture, exitTexture;
-	private Player player;
+	public Player player;
 	private SpriteBatch batch;
 	private boolean keyFound, ghostFound, ringFound;
 	private int x, y;
-	private Music theme;
-	private Sound scream;
+	public Music theme;
+	public Sound scream;
 	private int cash;
+	public boolean dead = false;
+
+	public HeinousRenderer renderer2;
+	private SpriteBatch batch2;
+	private MapBuffer MapLoader;
+	private Map<String, Boolean> nextMoves;
 
 	static class Player {
 		final Vector2 pos = new Vector2();
+		public int cash = 0;
 	}
 
 	static class Exit {
@@ -49,6 +56,16 @@ public class DungeonCrawler implements ApplicationListener {
 
 	@Override
 	public void create() {
+
+		// player class defined above
+		player = new Player();
+		// put him in the bottom corner
+		player.pos.set(0, 0);
+		MapLoader = new MapBuffer(new levelOne(this));
+		renderer2 = new HeinousRenderer(this, MapLoader, 1/16f);
+		batch2 = (SpriteBatch)renderer2.getBatch();
+
+		nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
 
 		// in-game currency
 		cash = 0;
@@ -74,10 +91,9 @@ public class DungeonCrawler implements ApplicationListener {
 
 		// tiles are 16x16
 		map = new TmxMapLoader().load("levels/latest.tmx");
-		renderer = new OrthogonalTiledMapRenderer(map, 1/16f);
-
-		batch = (SpriteBatch)renderer.getBatch();
-
+		//renderer = new OrthogonalTiledMapRenderer(map, 1/16f);
+		//batch = (SpriteBatch)renderer.getBatch();
+		batch = (SpriteBatch)renderer2.getBatch();
 		// width and height of loaded map in tiles
 		x = 10;
 		y = 15;
@@ -87,10 +103,6 @@ public class DungeonCrawler implements ApplicationListener {
 		camera.setToOrtho(false, x, y);
 		camera.update();
 
-		// player class defined above
-		player = new Player();
-		// put him in the bottom corner
-		player.pos.set(0, 0);
 	}
 
 	/**
@@ -100,13 +112,14 @@ public class DungeonCrawler implements ApplicationListener {
 	 * @param y - the y position of the tile you submit
 	 * @return - a map data structure consisting of strings "left", "right", "up",
 	 * 			 and "down" and the booleans stating if you can move in that direction
+	 * 	 THIS METHOD LOOKS AT THE LOWEST LAYER FROM TILED AS THE "MOVEABLE" PATH
 	 */
 	private Map<String, Boolean> checkNearbyTilesForMovement(float x, float y) {
 		Map<String, Boolean> returnedMap = new HashMap<String, Boolean>();
-		TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get(0);
+		TiledMapTileLayer layer = (TiledMapTileLayer)MapLoader.getCurrentMap().getMap().getLayers().get(0);
 
 		// x+1 == right of the submitted position
-		Cell cell = layer.getCell((int)x+1, (int)y);
+		Cell cell = layer.getCell((int)x + 1, (int)y);
 		if (cell != null) {
 			returnedMap.put("right", true);
 		} else {
@@ -143,22 +156,20 @@ public class DungeonCrawler implements ApplicationListener {
 		if (Gdx.input.isTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(touchPos);
+			if ((int) touchPos.x == player.pos.x + 1 && (int) touchPos.y == player.pos.y && nextMoves.get("right")) {
+				player.pos.x += 1;
+				nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+			} else if (Gdx.input.isTouched() && (int) touchPos.x == player.pos.x - 1 && (int) touchPos.y == player.pos.y && nextMoves.get("left")) {
+				player.pos.x -= 1;
+				nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+			} else if (Gdx.input.isTouched() && (int) touchPos.x == player.pos.x && (int) touchPos.y == player.pos.y + 1 && nextMoves.get("up")) {
+				player.pos.y += 1;
+				nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+			} else if (Gdx.input.isTouched() && (int) touchPos.x == player.pos.x && (int) touchPos.y == player.pos.y - 1 && nextMoves.get("down")) {
+				player.pos.y -= 1;
+				nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+			}
 		}
-
-		if (Gdx.input.isTouched() && (int)touchPos.x == player.pos.x+1 && (int)touchPos.y == player.pos.y
-				&& checkNearbyTilesForMovement(player.pos.x, player.pos.y).get("right")) {
-			player.pos.x +=1;
-		} else if (Gdx.input.isTouched() && (int)touchPos.x == player.pos.x-1 && (int)touchPos.y == player.pos.y
-				&& checkNearbyTilesForMovement(player.pos.x, player.pos.y).get("left")) {
-			player.pos.x -=1;
-		} else if (Gdx.input.isTouched() && (int)touchPos.x == player.pos.x && (int)touchPos.y == player.pos.y+1
-				&& checkNearbyTilesForMovement(player.pos.x, player.pos.y).get("up")) {
-			player.pos.y +=1;
-		} else if (Gdx.input.isTouched() && (int)touchPos.x == player.pos.x && (int)touchPos.y == player.pos.y-1
-				&& checkNearbyTilesForMovement(player.pos.x, player.pos.y).get("down")) {
-			player.pos.y -=1;
-		}
-
 	}
 
 	/**
@@ -207,17 +218,21 @@ public class DungeonCrawler implements ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		updatePlayer();
-		clearTile();
+		MapLoader.getCurrentMap().update(player);
+		//clearTile();
+		renderer2.setView(camera);
+		renderer2.render();
+		//renderer.setView(camera);
+		//renderer.render();
+		renderer2.HeinousRender(nextMoves);
 
-		renderer.setView(camera);
-		renderer.render();
+		//batch.begin();
+		//renderPlayer();
+		//renderExit(keyFound);
+		//placeOpenSpots();
+		//renderDeadGhost(ghostFound);
+		//batch.end();
 
-		batch.begin();
-		renderPlayer();
-		placeOpenSpots();
-		renderExit(keyFound);
-		renderDeadGhost(ghostFound);
-		batch.end();
 
 	}
 
@@ -246,6 +261,26 @@ public class DungeonCrawler implements ApplicationListener {
 		}
 
 		if (checkNearbyTilesForMovement(player.pos.x, player.pos.y).get("down")) {
+			batch.draw(openSpotTexture, player.pos.x, player.pos.y-1, 1, 1);
+		}
+
+	}
+
+	private void placeOpenSpots(Map<String, Boolean> available) {
+
+		if (available.get("left")) {
+			batch.draw(openSpotTexture, player.pos.x-1, player.pos.y, 1, 1);
+		}
+
+		if (available.get("right")) {
+			batch.draw(openSpotTexture, player.pos.x+1, player.pos.y, 1, 1);
+		}
+
+		if (available.get("up")) {
+			batch.draw(openSpotTexture, player.pos.x, player.pos.y+1, 1, 1);
+		}
+
+		if (available.get("down")) {
 			batch.draw(openSpotTexture, player.pos.x, player.pos.y-1, 1, 1);
 		}
 
