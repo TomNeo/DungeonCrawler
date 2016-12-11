@@ -14,23 +14,23 @@ import java.util.Map;
 
 public class HeinousRenderer extends OrthogonalTiledMapRenderer {
 
-    private TestMain.Player player;
+    private DungeonCrawler game;
     private MapBuffer mapBuffer;
 
     private TextureRegion playerTexture, openSpotTexture;
 
-    public HeinousRenderer(TestMain.Player player,  TiledMap inputMap) {
+    public HeinousRenderer(DungeonCrawler game,  TiledMap inputMap) {
         super(inputMap);
-        this.player = player;
+        this.game = game;
         playerTexture = new TextureRegion(new Texture("gfx/players.png"), 0, 0, 32, 32);
         openSpotTexture = new TextureRegion(new Texture("gfx/players.png"), 64, 0, 32, 32);
     }
 
 
-    public HeinousRenderer(TestMain.Player player, MapBuffer mapBuffer, float unitScale){
+    public HeinousRenderer(DungeonCrawler game, MapBuffer mapBuffer, float unitScale){
         super(mapBuffer.getCurrentMap().getMap(),unitScale);
         this.mapBuffer = mapBuffer;
-        this.player = player;
+        this.game = game;
         playerTexture = new TextureRegion(new Texture("gfx/players.png"), 0, 0, 32, 32);
         openSpotTexture = new TextureRegion(new Texture("gfx/players.png"), 64, 0, 32, 32);
     }
@@ -40,7 +40,9 @@ public class HeinousRenderer extends OrthogonalTiledMapRenderer {
      * draw player... duh
      */
     private void renderPlayer() {
-        batch.draw(playerTexture, player.pos.x, player.pos.y, 1, 1);
+        if(!game.dead) {
+            batch.draw(playerTexture, game.player.pos.x, game.player.pos.y, 1, 1);
+        }
     }
 
     public void HeinousRender(Map<String, Boolean> availableMoves){
@@ -53,17 +55,19 @@ public class HeinousRenderer extends OrthogonalTiledMapRenderer {
     }
 
     private void placeOpenSpots(Map<String, Boolean> available) {
-        if (available.get("left")) {
-            batch.draw(openSpotTexture, player.pos.x-1, player.pos.y, 1, 1);
-        }
-        if (available.get("right")) {
-            batch.draw(openSpotTexture, player.pos.x+1, player.pos.y, 1, 1);
-        }
-        if (available.get("up")) {
-            batch.draw(openSpotTexture, player.pos.x, player.pos.y+1, 1, 1);
-        }
-        if (available.get("down")) {
-            batch.draw(openSpotTexture, player.pos.x, player.pos.y-1, 1, 1);
+        if(!game.dead) {
+            if (available.get("left")) {
+                batch.draw(openSpotTexture, game.player.pos.x - 1, game.player.pos.y, 1, 1);
+            }
+            if (available.get("right")) {
+                batch.draw(openSpotTexture, game.player.pos.x + 1, game.player.pos.y, 1, 1);
+            }
+            if (available.get("up")) {
+                batch.draw(openSpotTexture, game.player.pos.x, game.player.pos.y + 1, 1, 1);
+            }
+            if (available.get("down")) {
+                batch.draw(openSpotTexture, game.player.pos.x, game.player.pos.y - 1, 1, 1);
+            }
         }
     }
 

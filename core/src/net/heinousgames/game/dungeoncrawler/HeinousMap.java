@@ -31,7 +31,7 @@ public abstract class HeinousMap {
      */
     public abstract void renderForeground(SpriteBatch batch);
 
-    public abstract void update(TestMain.Player player);
+    public abstract void update(DungeonCrawler.Player player);
 
     public void setX(int input){
         x = input;

@@ -13,11 +13,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 public class levelOne extends HeinousMap{
 
-    private TestMain game;
+    private DungeonCrawler game;
     private boolean keyFound, ghostFound, ringFound;
     private TextureRegion ghostTexture, exitTexture;
+    private boolean justDied = false;
 
-    public levelOne(TestMain game) {
+    public levelOne(DungeonCrawler game) {
         super(new TmxMapLoader().load("levels/latest.tmx"));
         setX(10);
         setY(15);
@@ -38,14 +39,20 @@ public class levelOne extends HeinousMap{
     }
 
     @Override
-    public void update(TestMain.Player player) {
+    public void update(DungeonCrawler.Player player) {
+
         clearTile(player);
+        if (game.dead && !justDied){
+            game.theme.stop();
+            game.scream.play();
+            justDied = true;
+        }
     }
 
     /**
      * Clears tiles after visiting them. Includes black tiles and tiles with items
      */
-    private void clearTile(TestMain.Player player) {
+    private void clearTile(DungeonCrawler.Player player) {
         // black layer (unvisited tiles)
         TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(3);
 
@@ -62,6 +69,7 @@ public class levelOne extends HeinousMap{
             if (layer2.getCell((int)player.pos.x, (int)player.pos.y).getTile().getProperties().containsKey("monster")) {
                 // boolean is submitted to render method to draw the ghost full screen
                 ghostFound = true;
+                game.dead = true;
             } else if (layer2.getCell((int)player.pos.x, (int)player.pos.y).getTile().getProperties().containsKey("key")) {
                 // boolean is submitted to render method to tell it to draw the exit stairs
                 keyFound = true;
@@ -105,10 +113,8 @@ public class levelOne extends HeinousMap{
      */
     private void renderDeadGhost(SpriteBatch batch, boolean visitedGhost) {
         if (visitedGhost) {
-            game.theme.stop();
-            game.scream.play();
             game.renderer2.getBatch().draw(ghostTexture, 0, 0, getX(), getY());
-            visitedGhost = false;
+            //visitedGhost = false;
         }
     }
 }
