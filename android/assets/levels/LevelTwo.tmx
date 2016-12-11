@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="15" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="beige_dungeon" tilewidth="16" tileheight="16" tilecount="16" columns="4">
+  <image source="beige_dungeon.png" trans="000000" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="17" name="tileset" tilewidth="16" tileheight="16" tilecount="16" columns="8">
+  <image source="tileset.png" width="128" height="32"/>
+ </tileset>
+ <tileset firstgid="33" name="monster" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="monster.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="monster" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="34" name="key" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="key.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="key" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="35" name="ring" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="ring.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="ring" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="36" name="transparent_exit" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="transparent_exit.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="exit" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Walkable" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eJwTYIAAATwYlzwDDnls6rGpZcChlpBbGPCwiTUPnxmk6MHFJ2QeLj34whufOkLmMeAQJxS2uPQSwgCwgQZR
+  </data>
+ </layer>
+ <layer name="Collidable" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxTYqAMKFOoHx0oUtk8bOZT2820ArQOC1oBFSAGAE4HAPA=
+  </data>
+ </layer>
+ <layer name="Decoration" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eJyNkdsKACEIRNWN2ksL/f/XboHCIK31cCAmx7FsRMSdFiALPTn9DWqxV1Gi7Fkfy2Pwi3Ju9rEZC3iuhd88tfOAnhVfl1ydf4dMPIN7YwZ/9rPjTircRTkZ/pOB42fPER//qAeY
+  </data>
+ </layer>
+ <layer name="Dark Layer" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxTYoAAYTwYlzwIKGORx6aeAYscAw61hNzCgIdNjHnKWPQR4x5c6rDxCZmHSw++8ManjpB5DDjECYUtLr2EMAB8Gwev
+  </data>
+ </layer>
+</map>
