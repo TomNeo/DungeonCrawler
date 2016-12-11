@@ -46,6 +46,7 @@ public class HeinousRenderer extends OrthogonalTiledMapRenderer {
     }
 
     public void HeinousRender(Map<String, Boolean> availableMoves){
+        render();
         batch.begin();
         mapBuffer.getCurrentMap().renderBackground((SpriteBatch)batch);
         renderPlayer();

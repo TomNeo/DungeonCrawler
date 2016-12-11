@@ -3,7 +3,6 @@ package net.heinousgames.game.dungeoncrawler;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
@@ -11,14 +10,14 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
  * Created by User on 12/10/2016.
  */
 
-public class levelOne extends HeinousMap{
+public class LevelOne extends HeinousMap {
 
     private DungeonCrawler game;
     private boolean keyFound, ghostFound, ringFound;
     private TextureRegion ghostTexture, exitTexture;
     private boolean justDied = false;
 
-    public levelOne(DungeonCrawler game) {
+    public LevelOne(DungeonCrawler game) {
         super(new TmxMapLoader().load("levels/latest.tmx"));
         setX(10);
         setY(15);
@@ -113,7 +112,7 @@ public class levelOne extends HeinousMap{
      */
     private void renderDeadGhost(SpriteBatch batch, boolean visitedGhost) {
         if (visitedGhost) {
-            game.renderer2.getBatch().draw(ghostTexture, 0, 0, getX(), getY());
+            game.renderer.getBatch().draw(ghostTexture, 0, 0, getX(), getY());
             //visitedGhost = false;
         }
     }
