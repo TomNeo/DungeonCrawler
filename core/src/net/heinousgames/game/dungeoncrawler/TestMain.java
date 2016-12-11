@@ -61,10 +61,10 @@ public class TestMain implements ApplicationListener {
         // put him in the bottom corner
         player.pos.set(0, 0);
         MapLoader = new MapBuffer(new levelOne(this));
-        renderer2 = new HeinousRenderer(player,MapLoader,1/16f);
+        renderer2 = new HeinousRenderer(player, MapLoader, 1/16f);
         batch2 = (SpriteBatch)renderer2.getBatch();
 
-        nextMoves = checkNearbyTilesForMovement(player.pos.x,player.pos.y);
+        nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
 
         // in-game currency
         cash = 0;
@@ -118,7 +118,7 @@ public class TestMain implements ApplicationListener {
         TiledMapTileLayer layer = (TiledMapTileLayer)MapLoader.getCurrentMap().getMap().getLayers().get(0);
 
         // x+1 == right of the submitted position
-        Cell cell = layer.getCell((int)x+1, (int)y);
+        Cell cell = layer.getCell((int)x + 1, (int)y);
         if (cell != null) {
             returnedMap.put("right", true);
         } else {
