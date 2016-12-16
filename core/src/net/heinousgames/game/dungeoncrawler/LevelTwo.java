@@ -48,6 +48,11 @@ public class LevelTwo extends HeinousMap {
         }
     }
 
+    @Override
+    public void reset() {
+
+    }
+
     /**
      * Clears tiles after visiting them. Includes black tiles and tiles with items
      */

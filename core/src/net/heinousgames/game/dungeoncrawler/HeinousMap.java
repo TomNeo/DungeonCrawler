@@ -48,4 +48,6 @@ public abstract class HeinousMap {
     public int getY(){
         return y;
     }
+
+    public abstract void reset();
 }
