@@ -61,7 +61,7 @@ public class DungeonCrawler implements ApplicationListener {
 		player = new Player();
 		// put him in the bottom corner
 		player.pos.set(1, 1);
-		MapLoader = new MapBuffer(new LevelOne(this));
+		MapLoader = new MapBuffer(new levelOne(this));
 		renderer2 = new HeinousRenderer(this, MapLoader, 1/16f);
 		batch2 = (SpriteBatch)renderer2.getBatch();
 
