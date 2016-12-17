@@ -62,7 +62,7 @@ public class DungeonCrawler implements ApplicationListener {
 		// put him in the bottom corner
 		player.pos.set(1, 1);
 		MapLoader = new MapBuffer(new levelOne(this));
-		renderer2 = new HeinousRenderer(this, MapLoader, 1/16f);
+		renderer2 = new HeinousRenderer(this, MapLoader, 1/60f);
 		batch2 = (SpriteBatch)renderer2.getBatch();
 
 		nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
@@ -78,19 +78,19 @@ public class DungeonCrawler implements ApplicationListener {
 
 		// zelda theme, must change
 		theme = Gdx.audio.newMusic(Gdx.files.internal("sfx/theme.mp3"));
-		theme.setLooping(true);
-		theme.play();
+//		theme.setLooping(true);
+//		theme.play();
 
 		// pretty sure this scream was free online for when ghost is found
 		scream = Gdx.audio.newSound(Gdx.files.internal("sfx/scream.mp3"));
 
-		playerTexture = new TextureRegion(new Texture("gfx/players.png"), 0, 0, 32, 32);
-		openSpotTexture = new TextureRegion(new Texture("gfx/players.png"), 64, 0, 32, 32);
+		playerTexture = new TextureRegion(new Texture("gfx/player2.png"));
+		openSpotTexture = new TextureRegion(new Texture("gfx/arrow2.png"));
 		ghostTexture = new TextureRegion(new Texture("gfx/ghost.png"), 0, 0, 320, 479);
 		exitTexture = new TextureRegion(new Texture("levels/exit.png"), 0, 0, 32, 32);
 
 		// tiles are 16x16
-		map = new TmxMapLoader().load("levels/latest.tmx");
+		map = new TmxMapLoader().load("levels/steves2.tmx");
 		//renderer = new OrthogonalTiledMapRenderer(map, 1/16f);
 		//batch = (SpriteBatch)renderer.getBatch();
 		batch = (SpriteBatch)renderer2.getBatch();
