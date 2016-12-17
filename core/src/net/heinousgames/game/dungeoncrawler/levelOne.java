@@ -38,14 +38,19 @@ public class LevelOne extends HeinousMap {
     }
 
     @Override
-    public void update(DungeonCrawler.Player player) {
+    public void update(float deltaTime) {
 
-        clearTile(player);
+        clearTile(game.player);
         if (game.dead && !justDied){
             game.theme.stop();
             game.scream.play();
             justDied = true;
         }
+    }
+
+    @Override
+    public void reset() {
+
     }
 
     /**

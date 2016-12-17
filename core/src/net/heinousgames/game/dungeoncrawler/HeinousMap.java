@@ -9,7 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 
 public abstract class HeinousMap {
 
-    private TiledMap map;
+    public TiledMap map;
     private int x;
     private int y;
 
@@ -31,7 +31,7 @@ public abstract class HeinousMap {
      */
     public abstract void renderForeground(SpriteBatch batch);
 
-    public abstract void update(DungeonCrawler.Player player);
+    public abstract void update(float deltaTime);
 
     public void setX(int input){
         x = input;

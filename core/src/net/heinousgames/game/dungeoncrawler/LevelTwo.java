@@ -38,9 +38,9 @@ public class LevelTwo extends HeinousMap {
     }
 
     @Override
-    public void update(DungeonCrawler.Player player) {
+    public void update(float deltaTime) {
 
-        clearTile(player);
+        clearTile();
         if (game.dead && !justDied){
             game.theme.stop();
             game.scream.play();
@@ -50,13 +50,14 @@ public class LevelTwo extends HeinousMap {
 
     @Override
     public void reset() {
-
+        game.player.pos.x = 0;
+        game.player.pos.y = 0;
     }
 
     /**
      * Clears tiles after visiting them. Includes black tiles and tiles with items
      */
-    private void clearTile(DungeonCrawler.Player player) {
+    private void clearTile() {
         // black layer (unvisited tiles)
         TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(3);
 
@@ -64,30 +65,30 @@ public class LevelTwo extends HeinousMap {
         TiledMapTileLayer layer2 = (TiledMapTileLayer)this.getMap().getLayers().get(1);
 
         // clear the black tile so it appears you visited this spot
-        if (layer.getCell((int)player.pos.x, (int)player.pos.y) != null) {
-            layer.setCell((int)player.pos.x, (int)player.pos.y, null);
+        if (layer.getCell((int)game.player.pos.x, (int)game.player.pos.y) != null) {
+            layer.setCell((int)game.player.pos.x, (int)game.player.pos.y, null);
         }
 
         // ghost, ring, key layer
-        if (layer2.getCell((int)player.pos.x, (int)player.pos.y) != null) {
-            if (layer2.getCell((int)player.pos.x, (int)player.pos.y).getTile().getProperties().containsKey("monster")) {
+        if (layer2.getCell((int)game.player.pos.x, (int)game.player.pos.y) != null) {
+            if (layer2.getCell((int)game.player.pos.x, (int)game.player.pos.y).getTile().getProperties().containsKey("monster")) {
                 // boolean is submitted to render method to draw the ghost full screen
                 ghostFound = true;
                 game.dead = true;
-            } else if (layer2.getCell((int)player.pos.x, (int)player.pos.y).getTile().getProperties().containsKey("key")) {
+            } else if (layer2.getCell((int)game.player.pos.x, (int)game.player.pos.y).getTile().getProperties().containsKey("key")) {
                 // boolean is submitted to render method to tell it to draw the exit stairs
                 keyFound = true;
-                layer.setCell((int)player.pos.x, (int)player.pos.y, null);
-            } else if (layer2.getCell((int)player.pos.x, (int)player.pos.y).getTile().getProperties().containsKey("ring")) {
+                layer.setCell((int)game.player.pos.x, (int)game.player.pos.y, null);
+            } else if (layer2.getCell((int)game.player.pos.x, (int)game.player.pos.y).getTile().getProperties().containsKey("ring")) {
                 // boolean is submitted to render method to tell it to add cash
                 ringFound = true;
                 if (ringFound) {
                     ringFound = false;
-                    player.cash += 5;
+                    game.player.cash += 5;
                 }
                 // clear the tile from both the black layer and the layer that has the item
-                layer.setCell((int)player.pos.x, (int)player.pos.y, null);
-                layer2.setCell((int)player.pos.x, (int)player.pos.y, null);
+                layer.setCell((int)game.player.pos.x, (int)game.player.pos.y, null);
+                layer2.setCell((int)game.player.pos.x, (int)game.player.pos.y, null);
             }
         }
     }

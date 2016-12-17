@@ -29,7 +29,9 @@ public class DungeonCrawler implements ApplicationListener {
 
 	public HeinousRenderer renderer;
 	private MapBuffer MapLoader;
-	private Map<String, Boolean> nextMoves;
+	public Map<String, Boolean> nextMoves;
+
+
 
 	static class Player {
 		final Vector2 pos = new Vector2();
@@ -71,7 +73,7 @@ public class DungeonCrawler implements ApplicationListener {
 	 * 			 and "down" and the booleans stating if you can move in that direction
 	 * 	 THIS METHOD LOOKS AT THE LOWEST LAYER FROM TILED AS THE "MOVEABLE" PATH
 	 */
-	private Map<String, Boolean> checkNearbyTilesForMovement(float x, float y) {
+	public Map<String, Boolean> checkNearbyTilesForMovement(float x, float y) {
 		Map<String, Boolean> returnedMap = new HashMap<String, Boolean>();
 		TiledMapTileLayer layer = (TiledMapTileLayer)MapLoader.getCurrentMap().getMap().getLayers().get(0);
 
@@ -130,13 +132,17 @@ public class DungeonCrawler implements ApplicationListener {
 	}
 
 	@Override
-	public void render() {
+	public void render(){
+		render(Gdx.graphics.getDeltaTime());
+	}
+
+	public void render(float deltaTime) {
 		// clear the screen
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		updatePlayer();
-		MapLoader.getCurrentMap().update(player);
+		MapLoader.getCurrentMap().update(deltaTime);
 
 		camera.setToOrtho(false, MapLoader.getCurrentMap().getX(), MapLoader.getCurrentMap().getY());
 		camera.update();
