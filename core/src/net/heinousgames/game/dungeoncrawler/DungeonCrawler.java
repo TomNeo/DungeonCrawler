@@ -60,8 +60,8 @@ public class DungeonCrawler implements ApplicationListener {
 		// player class defined above
 		player = new Player();
 		// put him in the bottom corner
-		player.pos.set(0, 0);
-		MapLoader = new MapBuffer(new levelOne(this));
+		player.pos.set(1, 1);
+		MapLoader = new MapBuffer(new LevelOne(this));
 		renderer2 = new HeinousRenderer(this, MapLoader, 1/16f);
 		batch2 = (SpriteBatch)renderer2.getBatch();
 
@@ -95,12 +95,14 @@ public class DungeonCrawler implements ApplicationListener {
 		//batch = (SpriteBatch)renderer.getBatch();
 		batch = (SpriteBatch)renderer2.getBatch();
 		// width and height of loaded map in tiles
-		x = 10;
-		y = 15;
+		x = 15;
+		y = 10;
 
 		// create an orthographic camera, shows us 10x15 units of the world
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, x, y);
+		camera.position.x = player.pos.x;
+		camera.position.y = player.pos.y;
 		camera.update();
 
 	}
@@ -116,7 +118,7 @@ public class DungeonCrawler implements ApplicationListener {
 	 */
 	private Map<String, Boolean> checkNearbyTilesForMovement(float x, float y) {
 		Map<String, Boolean> returnedMap = new HashMap<String, Boolean>();
-		TiledMapTileLayer layer = (TiledMapTileLayer)MapLoader.getCurrentMap().getMap().getLayers().get(0);
+		TiledMapTileLayer layer = (TiledMapTileLayer)MapLoader.getCurrentMap().getMap().getLayers().get(1);
 
 		// x+1 == right of the submitted position
 		Cell cell = layer.getCell((int)x + 1, (int)y);
@@ -153,7 +155,7 @@ public class DungeonCrawler implements ApplicationListener {
 
 	private void updatePlayer() {
 		Vector3 touchPos = new Vector3();
-		if (Gdx.input.isTouched()) {
+		if (Gdx.input.justTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(touchPos);
 			if ((int) touchPos.x == player.pos.x + 1 && (int) touchPos.y == player.pos.y && nextMoves.get("right")) {
@@ -222,6 +224,10 @@ public class DungeonCrawler implements ApplicationListener {
 		//clearTile();
 		renderer2.setView(camera);
 		renderer2.render();
+
+		camera.position.x = player.pos.x;
+		camera.position.y = player.pos.y;
+		camera.update();
 		//renderer.setView(camera);
 		//renderer.render();
 		renderer2.HeinousRender(nextMoves);
