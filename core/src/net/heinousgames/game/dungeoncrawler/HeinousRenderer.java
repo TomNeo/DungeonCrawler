@@ -22,8 +22,8 @@ public class HeinousRenderer extends OrthogonalTiledMapRenderer {
     public HeinousRenderer(DungeonCrawler game,  TiledMap inputMap) {
         super(inputMap);
         this.game = game;
-        playerTexture = new TextureRegion(new Texture("gfx/players.png"), 0, 0, 32, 32);
-        openSpotTexture = new TextureRegion(new Texture("gfx/players.png"), 64, 0, 32, 32);
+        playerTexture = new TextureRegion(new Texture("gfx/player2.png"));
+        openSpotTexture = new TextureRegion(new Texture("gfx/arrow2.png"));
     }
 
 
@@ -31,8 +31,8 @@ public class HeinousRenderer extends OrthogonalTiledMapRenderer {
         super(mapBuffer.getCurrentMap().getMap(),unitScale);
         this.mapBuffer = mapBuffer;
         this.game = game;
-        playerTexture = new TextureRegion(new Texture("gfx/players.png"), 0, 0, 32, 32);
-        openSpotTexture = new TextureRegion(new Texture("gfx/players.png"), 64, 0, 32, 32);
+        playerTexture = new TextureRegion(new Texture("gfx/player2.png"));
+        openSpotTexture = new TextureRegion(new Texture("gfx/arrow2.png"));
     }
 
 
