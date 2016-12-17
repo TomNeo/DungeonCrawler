@@ -45,7 +45,7 @@ public class DungeonCrawler implements ApplicationListener {
 		player = new Player();
 		// put him in the bottom corner
 		player.pos.set(0, 0);
-		MapLoader = new MapBuffer(new LevelTwo(this));
+		MapLoader = new MapBuffer(new LevelThree(this));
 		renderer = new HeinousRenderer(this, MapLoader, 1/16f);
 
 		nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
