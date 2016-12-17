@@ -11,7 +11,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
  * Created by User on 12/10/2016.
  */
 
-public class levelOne extends HeinousMap{
+public class levelOne extends HeinousMap {
 
     private DungeonCrawler game;
     private boolean keyFound, ghostFound, ringFound;
@@ -54,10 +54,10 @@ public class levelOne extends HeinousMap{
      */
     private void clearTile(DungeonCrawler.Player player) {
         // black layer (unvisited tiles)
-        TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(3);
+        TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(4);
 
         // layer that has ghosts, rings, and key
-        TiledMapTileLayer layer2 = (TiledMapTileLayer)this.getMap().getLayers().get(1);
+        TiledMapTileLayer layer2 = (TiledMapTileLayer)this.getMap().getLayers().get(2);
 
         // clear the black tile so it appears you visited this spot
         if (layer.getCell((int)player.pos.x, (int)player.pos.y) != null) {
@@ -95,7 +95,7 @@ public class levelOne extends HeinousMap{
      */
     private void renderExit(SpriteBatch batch, boolean drawExit) {
         if (drawExit) {
-            TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(4);
+            TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(5);
             for (int i = 0; i < getX(); i++) {
                 for (int j = 0; j < getY(); j++) {
                     if (layer.getCell(i, j) != null) {
