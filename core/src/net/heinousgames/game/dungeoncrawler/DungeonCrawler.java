@@ -101,9 +101,9 @@ public class DungeonCrawler implements ApplicationListener {
 		ringFound = false;
 
 		// zelda theme, must change
-		theme = Gdx.audio.newMusic(Gdx.files.internal("sfx/theme.mp3"));
-//		theme.setLooping(true);
-//		theme.play();
+		theme = Gdx.audio.newMusic(Gdx.files.internal("sfx/church.mp3"));
+		theme.setLooping(true);
+		theme.play();
 
 		// pretty sure this scream was free online for when ghost is found
 		scream = Gdx.audio.newSound(Gdx.files.internal("sfx/scream.mp3"));
