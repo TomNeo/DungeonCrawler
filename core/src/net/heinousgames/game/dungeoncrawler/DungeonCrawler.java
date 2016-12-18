@@ -183,28 +183,31 @@ public class DungeonCrawler implements ApplicationListener {
 	private void updatePlayer(long timeSpent, float deltaTime) {
 
 		if (isMoving) {
-			if (playerState == PlayerState.MOVING_DOWN && player.pos.y >= touchPos.y) {
+			if (playerState == PlayerState.MOVING_DOWN && player.pos.y >= (int)touchPos.y) {
 				player.pos.y -= (PLAYER_SPEED * deltaTime);
 				if (player.pos.y <= (int)touchPos.y) {
 					player.pos.y = (int)touchPos.y;
 					playerState = null;
 					isMoving = false;
+					nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
 				}
-			} else if (playerState == PlayerState.MOVING_UP && player.pos.y <= touchPos.y) {
+			} else if (playerState == PlayerState.MOVING_UP && player.pos.y <= (int)touchPos.y) {
 				player.pos.y += (PLAYER_SPEED * deltaTime);
 				if (player.pos.y >= (int)touchPos.y) {
 					player.pos.y = (int)touchPos.y;
 					playerState = null;
 					isMoving = false;
+					nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
 				}
-			} else if (playerState == PlayerState.MOVING_LEFT && player.pos.x >= touchPos.x) {
+			} else if (playerState == PlayerState.MOVING_LEFT && player.pos.x >= (int)touchPos.x) {
 				player.pos.x -= (PLAYER_SPEED * deltaTime);
 				if (player.pos.x <= (int)touchPos.x) {
 					player.pos.x = (int)touchPos.x;
 					playerState = null;
 					isMoving = false;
+					nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
 				}
-			} else if (playerState == PlayerState.MOVING_RIGHT && player.pos.x <= touchPos.x) {
+			} else if (playerState == PlayerState.MOVING_RIGHT && player.pos.x <= (int)touchPos.x) {
 				player.pos.x += (PLAYER_SPEED * deltaTime);
 				if (player.pos.x >= (int)touchPos.x) {
 					player.pos.x = (int)touchPos.x;
@@ -218,8 +221,6 @@ public class DungeonCrawler implements ApplicationListener {
 				if (timeSpent <= 500) {
 					return;
 				} else {
-					isMoving = true;
-					originalTime = System.currentTimeMillis();
 					playerMoving(deltaTime);
 				}
 			}
@@ -232,20 +233,20 @@ public class DungeonCrawler implements ApplicationListener {
 		camera.unproject(touchPos);
 		if ((int) touchPos.x == player.pos.x + 1 && nextMoves.get("right")) {
 			playerState = PlayerState.MOVING_RIGHT;
-//			player.pos.x += (PLAYER_SPEED * deltaTime);
-//			nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+			isMoving = true;
+			originalTime = System.currentTimeMillis();
 		} else if ((int) touchPos.x == player.pos.x - 1 && nextMoves.get("left")) {
 			playerState = PlayerState.MOVING_LEFT;
-//			player.pos.x -= (PLAYER_SPEED * deltaTime);
-//			nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+			isMoving = true;
+			originalTime = System.currentTimeMillis();
 		} else if ((int) touchPos.y == player.pos.y + 1 && nextMoves.get("up")) {
 			playerState = PlayerState.MOVING_UP;
-//			player.pos.y += (PLAYER_SPEED * deltaTime);
-//			nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+			isMoving = true;
+			originalTime = System.currentTimeMillis();
 		} else if ((int) touchPos.y == player.pos.y - 1 && nextMoves.get("down")) {
 			playerState = PlayerState.MOVING_DOWN;
-//			player.pos.y -= (PLAYER_SPEED * deltaTime);
-//			nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+			isMoving = true;
+			originalTime = System.currentTimeMillis();
 		}
 	}
 
