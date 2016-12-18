@@ -36,7 +36,7 @@ public class LevelThree extends HeinousMap {
         ghostTexture = new TextureRegion(new Texture("gfx/ghost.png"), 0, 0, 320, 479);
         exitTexture = new TextureRegion(new Texture("levels/exit.png"), 0, 0, 32, 32);
         darkTiles = loadDarkTiles();
-        collidables = loadCollidables();
+        //collidables = loadCollidables();
     }
 
     private Vector2[] loadCollidables() {
@@ -58,7 +58,7 @@ public class LevelThree extends HeinousMap {
 
     private  Vector2[] loadDarkTiles() {
         // black layer (unvisited tiles)
-        TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(3);
+        TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(4);
         layer.setVisible(false);
 
         ArrayList<Vector2> returnedList = new ArrayList();
@@ -80,15 +80,15 @@ public class LevelThree extends HeinousMap {
 
     @Override
     public void renderBackground(SpriteBatch batch) {
-        renderCollidableTiles(batch);
+        //renderCollidableTiles(batch);
         renderDarkTiles(batch);
     }
 
     private void renderDarkTiles(SpriteBatch batch) {
-        Texture temp = map.getTileSets().getTileSet("tiles").getTile(0).getTextureRegion().getTexture();
+        TiledMapTileLayer darkLayer = (TiledMapTileLayer)this.getMap().getLayers().get(4);
         for(int i = 0; i < darkTiles.length; i++){
             if(darkTiles[i]!=null){
-                batch.draw(temp,darkTiles[i].x,darkTiles[i].y, 1, 1);
+                batch.draw(darkLayer.getCell((int)darkTiles[i].x,(int)darkTiles[i].y).getTile().getTextureRegion().getTexture(),darkTiles[i].x,darkTiles[i].y, 1, 1);
             }
         }
     }
@@ -146,7 +146,7 @@ public class LevelThree extends HeinousMap {
      * Clears tiles after visiting them. Includes black tiles and tiles with items
      */
     private void clearTile() {
-
+        /*
         TiledMapTileLayer collidableLayer = (TiledMapTileLayer)this.getMap().getLayers().get(1);
         for(int i = 0; i < collidables.length; i++){
             if(collidables[i] != null && collidables[i].x == game.player.pos.x && collidables[i].y == game.player.pos.y){
@@ -169,7 +169,7 @@ public class LevelThree extends HeinousMap {
             }
         }
 
-
+*/
         for(int i = 0; i < darkTiles.length; i++){
             if(darkTiles[i] != null && darkTiles[i].x == game.player.pos.x && darkTiles[i].y == game.player.pos.y){
                 darkTiles[i] = null;
