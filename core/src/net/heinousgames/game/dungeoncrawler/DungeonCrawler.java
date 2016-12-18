@@ -84,9 +84,9 @@ public class DungeonCrawler implements ApplicationListener {
 		// player class defined above
 		player = new Player();
 		// put him in the bottom corner
-		player.pos.set(1, 1);
+		player.pos.set(12, 5);
 		MapLoader = new MapBuffer(new levelOne(this));
-		renderer2 = new HeinousRenderer(this, MapLoader, 1/60f);
+		renderer2 = new HeinousRenderer(this, MapLoader, 1/120f);
 		batch2 = (SpriteBatch)renderer2.getBatch();
 
 		nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
@@ -108,19 +108,19 @@ public class DungeonCrawler implements ApplicationListener {
 		// pretty sure this scream was free online for when ghost is found
 		scream = Gdx.audio.newSound(Gdx.files.internal("sfx/scream.mp3"));
 
-		playerTexture = new TextureRegion(new Texture("gfx/player2.png"));
-		openSpotTexture = new TextureRegion(new Texture("gfx/arrow2.png"));
+		playerTexture = new TextureRegion(new Texture("gfx/player3.png"));
+		openSpotTexture = new TextureRegion(new Texture("gfx/arrow3.png"));
 		ghostTexture = new TextureRegion(new Texture("gfx/ghost.png"), 0, 0, 320, 479);
 		exitTexture = new TextureRegion(new Texture("levels/exit.png"), 0, 0, 32, 32);
 
 		// tiles are 16x16
-		map = new TmxMapLoader().load("levels/steves2.tmx");
+		map = new TmxMapLoader().load("levels/steves3.tmx");
 		//renderer = new OrthogonalTiledMapRenderer(map, 1/16f);
 		//batch = (SpriteBatch)renderer.getBatch();
 		batch = (SpriteBatch)renderer2.getBatch();
 		// width and height of loaded map in tiles
-		x = 15;
-		y = 10;
+		x = 16;
+		y = 9;
 
 		// create an orthographic camera, shows us 10x15 units of the world
 		camera = new OrthographicCamera();
