@@ -31,6 +31,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  *
  */
 public class DungeonCrawler implements ApplicationListener {
+	public boolean dead = false;
+	private OrthographicCamera camera;
 
 	private enum PlayerState {
 		MOVING_LEFT, MOVING_RIGHT, MOVING_UP, MOVING_DOWN;
@@ -53,14 +55,12 @@ public class DungeonCrawler implements ApplicationListener {
 	private int x, y;
 	public Music theme;
 	public Sound scream;
-	private int cash;
-	public boolean dead = false;
-	private long originalTime;
 
-	public HeinousRenderer renderer2;
-	private SpriteBatch batch2;
+	public HeinousRenderer renderer;
 	private MapBuffer MapLoader;
-	private Map<String, Boolean> nextMoves;
+	public Map<String, Boolean> nextMoves;
+
+
 
 	private Vector3 touchPos;
 
@@ -69,36 +69,19 @@ public class DungeonCrawler implements ApplicationListener {
 		public int cash = 0;
 	}
 
-	static class Exit {
-		final Vector2 pos = new Vector2();
-	}
-
 	@Override
 	public void create() {
-
-//		framedStage = new Stage(new ScreenViewport(camera));
-//		bigStage = new Stage(new ScreenViewport(bigCamera));
-
-		originalTime = System.currentTimeMillis();
 
 		// player class defined above
 		player = new Player();
 		// put him in the bottom corner
 		player.pos.set(12, 5);
-		MapLoader = new MapBuffer(new levelOne(this));
-		renderer2 = new HeinousRenderer(this, MapLoader, 1/120f);
 		batch2 = (SpriteBatch)renderer2.getBatch();
+		player.pos.set(0, 0);
+		MapLoader = new MapBuffer(new levelOne(this));
+		renderer = new HeinousRenderer(this, MapLoader, 1/120f);
 
 		nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
-
-		// in-game currency
-		cash = 0;
-
-		// make true to displayer exit
-		keyFound = false;
-
-		// make true to increase in-game-currency
-		ringFound = false;
 
 		// zelda theme, must change
 		theme = Gdx.audio.newMusic(Gdx.files.internal("sfx/church.mp3"));
@@ -108,26 +91,8 @@ public class DungeonCrawler implements ApplicationListener {
 		// pretty sure this scream was free online for when ghost is found
 		scream = Gdx.audio.newSound(Gdx.files.internal("sfx/scream.mp3"));
 
-		playerTexture = new TextureRegion(new Texture("gfx/player3.png"));
-		openSpotTexture = new TextureRegion(new Texture("gfx/arrow3.png"));
-		ghostTexture = new TextureRegion(new Texture("gfx/ghost.png"), 0, 0, 320, 479);
-		exitTexture = new TextureRegion(new Texture("levels/exit.png"), 0, 0, 32, 32);
-
-		// tiles are 16x16
-		map = new TmxMapLoader().load("levels/steves3.tmx");
-		//renderer = new OrthogonalTiledMapRenderer(map, 1/16f);
-		//batch = (SpriteBatch)renderer.getBatch();
-		batch = (SpriteBatch)renderer2.getBatch();
-		// width and height of loaded map in tiles
-		x = 16;
-		y = 9;
-
-		// create an orthographic camera, shows us 10x15 units of the world
 		camera = new OrthographicCamera();
-		bigCamera = new OrthographicCamera(1920, 1080);
-
-//		framedStage.
-		camera.setToOrtho(false, x, y);
+		camera.setToOrtho(false, MapLoader.getCurrentMap().getX(), MapLoader.getCurrentMap().getY());
 		camera.position.x = player.pos.x;
 		camera.position.y = player.pos.y;
 		camera.update();
@@ -143,7 +108,7 @@ public class DungeonCrawler implements ApplicationListener {
 	 * 			 and "down" and the booleans stating if you can move in that direction
 	 * 	 THIS METHOD LOOKS AT THE LOWEST LAYER FROM TILED AS THE "MOVEABLE" PATH
 	 */
-	private Map<String, Boolean> checkNearbyTilesForMovement(float x, float y) {
+	public Map<String, Boolean> checkNearbyTilesForMovement(float x, float y) {
 		Map<String, Boolean> returnedMap = new HashMap<String, Boolean>();
 		TiledMapTileLayer layer = (TiledMapTileLayer)MapLoader.getCurrentMap().getMap().getLayers().get(1);
 
@@ -242,45 +207,6 @@ public class DungeonCrawler implements ApplicationListener {
 		}
 	}
 
-	/**
-	 * Clears tiles after visiting them. Includes black tiles and tiles with items
-	 */
-	private void clearTile() {
-		// black layer (unvisited tiles)
-		TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get(3);
-
-		// layer that has ghosts, rings, and key
-		TiledMapTileLayer layer2 = (TiledMapTileLayer)map.getLayers().get(1);
-
-		// clear the black tile so it appears you visited this spot
-		if (layer.getCell((int)player.pos.x, (int)player.pos.y) != null) {
-			layer.setCell((int)player.pos.x, (int)player.pos.y, null);
-		}
-
-		// ghost, ring, key layer
-		if (layer2.getCell((int)player.pos.x, (int)player.pos.y) != null) {
-			if (layer2.getCell((int)player.pos.x, (int)player.pos.y).getTile().getProperties().containsKey("monster")) {
-				// boolean is submitted to render method to draw the ghost full screen
-				ghostFound = true;
-			} else if (layer2.getCell((int)player.pos.x, (int)player.pos.y).getTile().getProperties().containsKey("key")) {
-				// boolean is submitted to render method to tell it to draw the exit stairs
-				keyFound = true;
-				layer.setCell((int)player.pos.x, (int)player.pos.y, null);
-			} else if (layer2.getCell((int)player.pos.x, (int)player.pos.y).getTile().getProperties().containsKey("ring")) {
-				// boolean is submitted to render method to tell it to add cash
-				ringFound = true;
-				if (ringFound) {
-					ringFound = false;
-					cash += 5;
-				}
-				// clear the tile from both the black layer and the layer that has the item
-				layer.setCell((int)player.pos.x, (int)player.pos.y, null);
-				layer2.setCell((int)player.pos.x, (int)player.pos.y, null);
-			}
-		}
-
-	}
-
 	@Override
 	public void render(){
 		render(Gdx.graphics.getDeltaTime());
@@ -292,105 +218,17 @@ public class DungeonCrawler implements ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		updatePlayer(/*System.currentTimeMillis() - originalTime, */deltaTime);
-		MapLoader.getCurrentMap().update(player);
-		//clearTile();
+		MapLoader.getCurrentMap().update(deltaTime);
 		renderer2.setView(camera);
 		renderer2.render();
 
+		camera.setToOrtho(false, MapLoader.getCurrentMap().getX(), MapLoader.getCurrentMap().getY());
 		camera.position.x = player.pos.x;
 		camera.position.y = player.pos.y;
 		camera.update();
-		//renderer.setView(camera);
-		//renderer.render();
-		renderer2.HeinousRender(nextMoves);
+		renderer.setView(camera);
+		renderer.HeinousRender(nextMoves);
 
-		//batch.begin();
-		//renderPlayer();
-		//renderExit(keyFound);
-		//placeOpenSpots();
-		//renderDeadGhost(ghostFound);
-		//batch.end();
-	}
-
-	/**
-	 * draw player... duh
-	 */
-	private void renderPlayer() {
-		batch.draw(playerTexture, player.pos.x, player.pos.y, 1, 1);
-	}
-
-	/**
-	 * draw the image on nearby spots indicating that this is a spot you can move to
-	 */
-	private void placeOpenSpots() {
-
-		if (checkNearbyTilesForMovement(player.pos.x, player.pos.y).get("left")) {
-			batch.draw(openSpotTexture, player.pos.x-1, player.pos.y, 1, 1);
-		}
-
-		if (checkNearbyTilesForMovement(player.pos.x, player.pos.y).get("right")) {
-			batch.draw(openSpotTexture, player.pos.x+1, player.pos.y, 1, 1);
-		}
-
-		if (checkNearbyTilesForMovement(player.pos.x, player.pos.y).get("up")) {
-			batch.draw(openSpotTexture, player.pos.x, player.pos.y+1, 1, 1);
-		}
-
-		if (checkNearbyTilesForMovement(player.pos.x, player.pos.y).get("down")) {
-			batch.draw(openSpotTexture, player.pos.x, player.pos.y-1, 1, 1);
-		}
-
-	}
-
-	private void placeOpenSpots(Map<String, Boolean> available) {
-
-		if (available.get("left")) {
-			batch.draw(openSpotTexture, player.pos.x-1, player.pos.y, 1, 1);
-		}
-
-		if (available.get("right")) {
-			batch.draw(openSpotTexture, player.pos.x+1, player.pos.y, 1, 1);
-		}
-
-		if (available.get("up")) {
-			batch.draw(openSpotTexture, player.pos.x, player.pos.y+1, 1, 1);
-		}
-
-		if (available.get("down")) {
-			batch.draw(openSpotTexture, player.pos.x, player.pos.y-1, 1, 1);
-		}
-
-	}
-
-	/**
-	 * Determines when it should or should not draw the exit stairs image
-	 * @param drawExit - the decider on whether the texture is drawn or not
-	 */
-	private void renderExit(boolean drawExit) {
-		if (drawExit) {
-			TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get(4);
-			for (int i = 0; i < x; i++) {
-				for (int j = 0; j < y; j++) {
-					if (layer.getCell(i, j) != null) {
-						if (layer.getCell(i, j).getTile().getProperties().containsKey("exit"))
-							batch.draw(exitTexture, i, j, 1, 1);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Determines whether or not the ghost should appear the scare the player
-	 * @param visitedGhost - the decider on whether the texture is drawn or not
-	 */
-	private void renderDeadGhost(boolean visitedGhost) {
-		if (visitedGhost) {
-			theme.stop();
-			scream.play();
-			batch.draw(ghostTexture, 0, 0, x, y);
-			visitedGhost = false;
-		}
 	}
 
 	@Override

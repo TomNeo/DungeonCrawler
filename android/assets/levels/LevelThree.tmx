@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="Beige Walls" tilewidth="16" tileheight="16" tilecount="16" columns="4">
+  <image source="beige_dungeon.png" width="64" height="64"/>
+  <tile id="15">
+   <properties>
+    <property name="exit" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="17" name="dark" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="dark.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="18" name="monster" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="monster.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="monster" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="19" name="key" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="key.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="key" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="20" name="ring" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="ring.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="ring" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Walkable" width="15" height="10">
+  <data encoding="csv">
+0,0,0,0,0,16,16,16,16,16,16,16,16,16,16,
+0,16,16,16,16,16,0,0,0,0,16,0,0,0,16,
+0,16,0,16,0,16,0,16,16,16,16,0,0,0,16,
+0,16,0,16,0,16,0,16,0,0,0,0,0,0,16,
+0,16,0,16,0,16,0,16,0,0,0,0,0,0,16,
+0,16,0,16,0,16,0,16,0,0,16,16,16,0,16,
+0,16,0,16,0,16,0,16,0,0,16,0,16,16,16,
+0,16,0,16,0,16,0,16,16,0,16,0,16,0,16,
+0,16,0,16,0,16,0,16,16,0,16,0,16,0,16,
+16,16,16,16,16,16,0,16,16,16,16,0,16,16,16
+</data>
+ </layer>
+ <layer name="Collidable" width="15" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,18,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,
+0,0,0,18,0,0,0,0,0,0,0,0,0,0,0,
+0,20,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,20,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,20,0,0,
+0,18,0,0,0,0,0,18,0,0,0,0,18,0,0,
+0,0,0,0,0,0,0,16,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Decoration" width="15" height="10">
+  <data encoding="csv">
+13,1,2,4,1,0,0,0,0,0,0,0,0,0,0,
+13,0,0,0,0,0,9,1,1,1,0,9,1,8,0,
+13,0,10,0,10,0,13,0,0,0,0,12,0,11,0,
+13,0,13,0,13,0,13,0,9,1,1,15,0,11,0,
+13,0,13,0,13,0,13,0,12,11,2,6,1,13,0,
+13,0,13,0,13,0,13,0,12,11,0,0,0,1,0,
+13,0,13,0,13,0,13,0,5,13,0,10,0,0,0,
+13,0,13,0,13,0,13,0,0,13,0,13,0,10,0,
+1,0,1,0,3,0,13,0,0,4,0,13,0,7,0,
+0,0,0,0,0,0,1,0,0,0,0,6,0,0,0
+</data>
+ </layer>
+ <layer name="Dark Layer" width="15" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,17,17,17,17,17,0,0,
+0,17,17,17,17,17,0,0,0,0,17,0,0,0,0,
+0,17,0,17,0,17,0,0,0,0,17,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,17,0,17,
+0,0,0,0,0,0,0,17,0,0,0,0,17,17,17,
+0,0,0,17,0,17,0,17,17,0,0,0,17,0,17,
+0,17,0,17,0,17,0,17,17,0,0,0,17,0,17,
+0,17,17,17,17,17,0,17,17,17,0,0,17,17,17
+</data>
+ </layer>
+</map>
