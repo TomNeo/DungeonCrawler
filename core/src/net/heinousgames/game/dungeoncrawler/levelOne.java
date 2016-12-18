@@ -19,7 +19,7 @@ public class levelOne extends HeinousMap {
     private boolean justDied = false;
 
     public levelOne(DungeonCrawler game) {
-        super(new TmxMapLoader().load("levels/steves2.tmx"));
+        super(new TmxMapLoader().load("levels/steves3.tmx"));
         setX(10);
         setY(15);
         this.game = game;
