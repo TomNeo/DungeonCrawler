@@ -29,9 +29,9 @@ public class LevelThree extends HeinousMap {
     private Vector2[] collidables;
 
     public LevelThree(DungeonCrawler game) {
-        super(new TmxMapLoader().load("levels/LevelThree.tmx"));
-        setX(15);
-        setY(10);
+        super(new TmxMapLoader().load("levels/steves3.tmx"));
+        setX(16);
+        setY(9);
         this.game = game;
         ghostTexture = new TextureRegion(new Texture("gfx/ghost.png"), 0, 0, 320, 479);
         exitTexture = new TextureRegion(new Texture("levels/exit.png"), 0, 0, 32, 32);
@@ -85,7 +85,7 @@ public class LevelThree extends HeinousMap {
     }
 
     private void renderDarkTiles(SpriteBatch batch) {
-        Texture temp = map.getTileSets().getTileSet("dark").getTile(17).getTextureRegion().getTexture();
+        Texture temp = map.getTileSets().getTileSet("tiles").getTile(0).getTextureRegion().getTexture();
         for(int i = 0; i < darkTiles.length; i++){
             if(darkTiles[i]!=null){
                 batch.draw(temp,darkTiles[i].x,darkTiles[i].y, 1, 1);

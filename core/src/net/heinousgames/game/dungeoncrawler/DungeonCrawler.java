@@ -5,24 +5,18 @@ import java.util.Map;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Main Class running the methods needed to play the game. The order of the methods in this
@@ -32,7 +26,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public class DungeonCrawler implements ApplicationListener {
 	public boolean dead = false;
-	private OrthographicCamera camera;
 
 	private enum PlayerState {
 		MOVING_LEFT, MOVING_RIGHT, MOVING_UP, MOVING_DOWN;
@@ -46,11 +39,9 @@ public class DungeonCrawler implements ApplicationListener {
 	private static float PLAYER_SPEED = 2f;
 
 	private TiledMap map;
-	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera, bigCamera;
 	private TextureRegion playerTexture, openSpotTexture, ghostTexture, exitTexture;
 	public Player player;
-	private SpriteBatch batch;
 	private boolean keyFound, ghostFound, ringFound, isMoving;
 	private int x, y;
 	public Music theme;
@@ -59,8 +50,6 @@ public class DungeonCrawler implements ApplicationListener {
 	public HeinousRenderer renderer;
 	private MapBuffer MapLoader;
 	public Map<String, Boolean> nextMoves;
-
-
 
 	private Vector3 touchPos;
 
@@ -76,9 +65,7 @@ public class DungeonCrawler implements ApplicationListener {
 		player = new Player();
 		// put him in the bottom corner
 		player.pos.set(12, 5);
-		batch2 = (SpriteBatch)renderer2.getBatch();
-		player.pos.set(0, 0);
-		MapLoader = new MapBuffer(new levelOne(this));
+		MapLoader = new MapBuffer(new LevelThree(this));
 		renderer = new HeinousRenderer(this, MapLoader, 1/120f);
 
 		nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
@@ -189,19 +176,15 @@ public class DungeonCrawler implements ApplicationListener {
 				if ((int) touchPos.x == player.pos.x + 1 && nextMoves.get("right")) {
 					playerState = PlayerState.MOVING_RIGHT;
 					isMoving = true;
-					originalTime = System.currentTimeMillis();
 				} else if ((int) touchPos.x == player.pos.x - 1 && nextMoves.get("left")) {
 					playerState = PlayerState.MOVING_LEFT;
 					isMoving = true;
-					originalTime = System.currentTimeMillis();
 				} else if ((int) touchPos.y == player.pos.y + 1 && nextMoves.get("up")) {
 					playerState = PlayerState.MOVING_UP;
 					isMoving = true;
-					originalTime = System.currentTimeMillis();
 				} else if ((int) touchPos.y == player.pos.y - 1 && nextMoves.get("down")) {
 					playerState = PlayerState.MOVING_DOWN;
 					isMoving = true;
-					originalTime = System.currentTimeMillis();
 				}
 			}
 		}
@@ -219,8 +202,6 @@ public class DungeonCrawler implements ApplicationListener {
 
 		updatePlayer(/*System.currentTimeMillis() - originalTime, */deltaTime);
 		MapLoader.getCurrentMap().update(deltaTime);
-		renderer2.setView(camera);
-		renderer2.render();
 
 		camera.setToOrtho(false, MapLoader.getCurrentMap().getX(), MapLoader.getCurrentMap().getY());
 		camera.position.x = player.pos.x;
