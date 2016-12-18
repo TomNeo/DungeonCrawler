@@ -41,7 +41,7 @@ public class DungeonCrawler implements ApplicationListener {
 
 	private PlayerState playerState;
 
-	private static float PLAYER_SPEED = 3f;
+	private static float PLAYER_SPEED = 2f;
 
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
@@ -180,7 +180,7 @@ public class DungeonCrawler implements ApplicationListener {
 		return returnedMap;
 	}
 
-	private void updatePlayer(long timeSpent, float deltaTime) {
+	private void updatePlayer(float deltaTime) {
 
 		if (isMoving) {
 			if (playerState == PlayerState.MOVING_DOWN && player.pos.y >= (int)touchPos.y) {
@@ -218,35 +218,27 @@ public class DungeonCrawler implements ApplicationListener {
 			}
 		} else {
 			if (Gdx.input.isTouched()) {
-				if (timeSpent <= 500) {
-					return;
-				} else {
-					playerMoving(deltaTime);
+				touchPos = new Vector3();
+				touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+				camera.unproject(touchPos);
+				if ((int) touchPos.x == player.pos.x + 1 && nextMoves.get("right")) {
+					playerState = PlayerState.MOVING_RIGHT;
+					isMoving = true;
+					originalTime = System.currentTimeMillis();
+				} else if ((int) touchPos.x == player.pos.x - 1 && nextMoves.get("left")) {
+					playerState = PlayerState.MOVING_LEFT;
+					isMoving = true;
+					originalTime = System.currentTimeMillis();
+				} else if ((int) touchPos.y == player.pos.y + 1 && nextMoves.get("up")) {
+					playerState = PlayerState.MOVING_UP;
+					isMoving = true;
+					originalTime = System.currentTimeMillis();
+				} else if ((int) touchPos.y == player.pos.y - 1 && nextMoves.get("down")) {
+					playerState = PlayerState.MOVING_DOWN;
+					isMoving = true;
+					originalTime = System.currentTimeMillis();
 				}
 			}
-		}
-	}
-
-	private void playerMoving(float deltaTime) {
-		touchPos = new Vector3();
-		touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-		camera.unproject(touchPos);
-		if ((int) touchPos.x == player.pos.x + 1 && nextMoves.get("right")) {
-			playerState = PlayerState.MOVING_RIGHT;
-			isMoving = true;
-			originalTime = System.currentTimeMillis();
-		} else if ((int) touchPos.x == player.pos.x - 1 && nextMoves.get("left")) {
-			playerState = PlayerState.MOVING_LEFT;
-			isMoving = true;
-			originalTime = System.currentTimeMillis();
-		} else if ((int) touchPos.y == player.pos.y + 1 && nextMoves.get("up")) {
-			playerState = PlayerState.MOVING_UP;
-			isMoving = true;
-			originalTime = System.currentTimeMillis();
-		} else if ((int) touchPos.y == player.pos.y - 1 && nextMoves.get("down")) {
-			playerState = PlayerState.MOVING_DOWN;
-			isMoving = true;
-			originalTime = System.currentTimeMillis();
 		}
 	}
 
@@ -299,7 +291,7 @@ public class DungeonCrawler implements ApplicationListener {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		updatePlayer(System.currentTimeMillis() - originalTime, deltaTime);
+		updatePlayer(/*System.currentTimeMillis() - originalTime, */deltaTime);
 		MapLoader.getCurrentMap().update(player);
 		//clearTile();
 		renderer2.setView(camera);
