@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="10" height="15" tilewidth="16" tileheight="16">
- <tileset firstgid="1" name="beige_dungeon" tilewidth="16" tileheight="16">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="29" height="16" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="beige_dungeon" tilewidth="16" tileheight="16" tilecount="16" columns="4">
   <image source="beige_dungeon.png" trans="000000" width="64" height="64"/>
  </tileset>
- <tileset firstgid="17" name="tileset" tilewidth="16" tileheight="16">
+ <tileset firstgid="17" name="tileset" tilewidth="16" tileheight="16" tilecount="16" columns="8">
   <image source="tileset.png" width="128" height="32"/>
  </tileset>
- <tileset firstgid="33" name="monster" tilewidth="16" tileheight="16">
+ <tileset firstgid="33" name="monster" tilewidth="16" tileheight="16" tilecount="1" columns="1">
   <image source="monster.png" width="16" height="16"/>
   <tile id="0">
    <properties>
@@ -14,7 +14,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="34" name="key" tilewidth="16" tileheight="16">
+ <tileset firstgid="34" name="key" tilewidth="16" tileheight="16" tilecount="1" columns="1">
   <image source="key.png" width="16" height="16"/>
   <tile id="0">
    <properties>
@@ -22,7 +22,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="35" name="ring" tilewidth="16" tileheight="16">
+ <tileset firstgid="35" name="ring" tilewidth="16" tileheight="16" tilecount="1" columns="1">
   <image source="ring.png" width="16" height="16"/>
   <tile id="0">
    <properties>
@@ -30,7 +30,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="36" name="transparent_exit" tilewidth="16" tileheight="16">
+ <tileset firstgid="36" name="transparent_exit" tilewidth="16" tileheight="16" tilecount="1" columns="1">
   <image source="transparent_exit.png" width="16" height="16"/>
   <tile id="0">
    <properties>
@@ -38,29 +38,34 @@
    </properties>
   </tile>
  </tileset>
- <layer name="Tile Layer 2" width="10" height="15">
+ <layer name="floor" width="29" height="16">
   <data encoding="base64" compression="zlib">
-   eJwTYIAAATwYlzwDDnls6rGpZcChlpBbGPCwiTUPnxmk6MHFJ2QeLj34whufOkLmMeAQJxS2uPQSwgCwgQZR
+   eJwTYGBgEBjFo3gUj+JRPIpHMUkYAGdnHQE=
   </data>
  </layer>
- <layer name="Tile Layer 4" width="10" height="15">
+ <layer name="Tile Layer 2" width="29" height="16">
   <data encoding="base64" compression="zlib">
-   eJxTYqAMKFOoHx0oUtk8bOZT2820ArQOC1oCAE13AMw=
+   eJzFkcENACAIAxnB/af137RitNUmRIOP47DqTwZUweksxUxW55tkql5ilt+ezI3db2djzBU/9Z8dE+PeLfbVPhy7Vc7qLenJ4vhPxnP4IRN9O4/OfScns7o8X2UCGjgS4Q==
   </data>
  </layer>
- <layer name="Tile Layer 1" width="10" height="15">
+ <layer name="Tile Layer 4" width="29" height="16">
   <data encoding="base64" compression="zlib">
-   eJyNkdsKACEIRNWN2ksL/f/XboHCIK31cCAmx7FsRMSdFiALPTn9DWqxV1Gi7Fkfy2Pwi3Ju9rEZC3iuhd88tfOAnhVfl1ydf4dMPIN7YwZ/9rPjTircRTkZ/pOB42fPER//qAeY
+   eJxjYBgFo2BoAuWBdsAoGAWjYEQDAKVMACQ=
   </data>
  </layer>
- <layer name="Tile Layer 3" width="10" height="15">
+ <layer name="Tile Layer 1" width="29" height="16">
   <data encoding="base64" compression="zlib">
-   eJxTYoAAYTwYlzwIKGORx6aeAYscAw61hNzCgIdNjHnKWPQR4x5c6rDxCZmHSw++8ManjpB5DDjECYUtLr2EMAB8Gwev
+   eJzFlAEKwyAMRVMn7ZpN2P1POwXDPlnsNLVM+ERM7Uuiholo+aHQ8U2vOCtlvZRCtdHwnVWqIsNHys5mblWzczpi6rpKTZcLYhFm4dz/kKfYDfg7zFfQLGZU68U+sx5qrSUaZJLag3Fo5t7IeZRZ5kyfOxTomy92NXzePFu100zL52XKeeK9wXPGevKE2hLswdgZ/ocjGWujzBKvvH3sx7cDprfHW32oN1bv8MYbT+b5BtDRE/w=
   </data>
  </layer>
- <layer name="Tile Layer 5" width="10" height="15">
+ <layer name="Tile Layer 3" width="29" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo4C6QAWIAQLoACU=
+   eJzFlEEKACAIBP1DT+j/f+zUZXARasUFSRJcJ6GIGS1E4HSG8uyMirfTU911zDLJuQVblv/Oxp4Luaq791l5Ug5O9srqrDneVjGrWidnJsc+Mz8HHz3JW3E49DLrC+P9ByZ0ANgTFng=
+  </data>
+ </layer>
+ <layer name="Tile Layer 5" width="29" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMAroC1QG2gFUAAAi0AAl
   </data>
  </layer>
 </map>
