@@ -39,6 +39,7 @@ public class DungeonCrawler implements ApplicationListener {
 	public Sound scream;
 	private int cash;
 	public boolean dead = false;
+	private long originalTime;
 
 	public HeinousRenderer renderer2;
 	private SpriteBatch batch2;
@@ -56,6 +57,8 @@ public class DungeonCrawler implements ApplicationListener {
 
 	@Override
 	public void create() {
+
+		originalTime = System.currentTimeMillis();
 
 		// player class defined above
 		player = new Player();
@@ -153,23 +156,29 @@ public class DungeonCrawler implements ApplicationListener {
 		return returnedMap;
 	}
 
-	private void updatePlayer() {
-		Vector3 touchPos = new Vector3();
-		if (Gdx.input.justTouched()) {
-			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-			camera.unproject(touchPos);
-			if ((int) touchPos.x == player.pos.x + 1 && (int) touchPos.y == player.pos.y && nextMoves.get("right")) {
-				player.pos.x += 1;
-				nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
-			} else if (Gdx.input.isTouched() && (int) touchPos.x == player.pos.x - 1 && (int) touchPos.y == player.pos.y && nextMoves.get("left")) {
-				player.pos.x -= 1;
-				nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
-			} else if (Gdx.input.isTouched() && (int) touchPos.x == player.pos.x && (int) touchPos.y == player.pos.y + 1 && nextMoves.get("up")) {
-				player.pos.y += 1;
-				nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
-			} else if (Gdx.input.isTouched() && (int) touchPos.x == player.pos.x && (int) touchPos.y == player.pos.y - 1 && nextMoves.get("down")) {
-				player.pos.y -= 1;
-				nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+	private void updatePlayer(long timeSpent) {
+
+		if (timeSpent <= 500) {
+			return;
+		} else {
+			originalTime = System.currentTimeMillis();
+			Vector3 touchPos = new Vector3();
+			if (Gdx.input.isTouched()) {
+				touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+				camera.unproject(touchPos);
+				if ((int) touchPos.x == player.pos.x + 1 && (int) touchPos.y == player.pos.y && nextMoves.get("right")) {
+					player.pos.x += 1;
+					nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+				} else if (Gdx.input.isTouched() && (int) touchPos.x == player.pos.x - 1 && (int) touchPos.y == player.pos.y && nextMoves.get("left")) {
+					player.pos.x -= 1;
+					nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+				} else if (Gdx.input.isTouched() && (int) touchPos.x == player.pos.x && (int) touchPos.y == player.pos.y + 1 && nextMoves.get("up")) {
+					player.pos.y += 1;
+					nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+				} else if (Gdx.input.isTouched() && (int) touchPos.x == player.pos.x && (int) touchPos.y == player.pos.y - 1 && nextMoves.get("down")) {
+					player.pos.y -= 1;
+					nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
+				}
 			}
 		}
 	}
@@ -214,12 +223,16 @@ public class DungeonCrawler implements ApplicationListener {
 	}
 
 	@Override
-	public void render() {
+	public void render(){
+		render(Gdx.graphics.getDeltaTime());
+	}
+
+	public void render(float deltaTime) {
 		// clear the screen
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		updatePlayer();
+		updatePlayer(System.currentTimeMillis() - originalTime);
 		MapLoader.getCurrentMap().update(player);
 		//clearTile();
 		renderer2.setView(camera);
@@ -238,8 +251,6 @@ public class DungeonCrawler implements ApplicationListener {
 		//placeOpenSpots();
 		//renderDeadGhost(ghostFound);
 		//batch.end();
-
-
 	}
 
 	/**
