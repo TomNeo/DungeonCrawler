@@ -36,7 +36,7 @@ public class DungeonCrawler implements ApplicationListener {
 
 	private PlayerState playerState;
 
-	private static float PLAYER_SPEED = 2f;
+	private static float PLAYER_SPEED = 3f;
 
 	private TiledMap map;
 	private OrthographicCamera camera, bigCamera;
@@ -64,7 +64,7 @@ public class DungeonCrawler implements ApplicationListener {
 		// player class defined above
 		player = new Player();
 		// put him in the bottom corner
-		player.pos.set(12, 5);
+		player.pos.set(0,2);
 		MapLoader = new MapBuffer(new LevelThree(this));
 		renderer = new HeinousRenderer(this, MapLoader, 1/120f);
 
@@ -97,7 +97,7 @@ public class DungeonCrawler implements ApplicationListener {
 	 */
 	public Map<String, Boolean> checkNearbyTilesForMovement(float x, float y) {
 		Map<String, Boolean> returnedMap = new HashMap<String, Boolean>();
-		TiledMapTileLayer layer = (TiledMapTileLayer)MapLoader.getCurrentMap().getMap().getLayers().get(1);
+		TiledMapTileLayer layer = (TiledMapTileLayer)MapLoader.getCurrentMap().getMap().getLayers().get(0);
 
 		// x+1 == right of the submitted position
 		Cell cell = layer.getCell((int)x + 1, (int)y);
