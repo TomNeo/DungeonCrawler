@@ -130,6 +130,11 @@ public class LevelThree extends HeinousMap {
         }
     }
 
+    @Override
+    public void onLoad() {
+
+    }
+
     private void checkDoors() {
         if (game.player.pos.x == 3 && game.player.pos.y == 4){
             game.player.pos.x = 2;

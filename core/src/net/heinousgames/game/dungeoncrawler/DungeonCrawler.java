@@ -36,7 +36,7 @@ public class DungeonCrawler implements ApplicationListener {
 
 	private PlayerState playerState;
 
-	private static float PLAYER_SPEED = 3f;
+	private static float PLAYER_SPEED = 4f;
 
 	private TiledMap map;
 	private OrthographicCamera camera, bigCamera;
@@ -48,7 +48,7 @@ public class DungeonCrawler implements ApplicationListener {
 	public Sound scream;
 
 	public HeinousRenderer renderer;
-	private MapBuffer MapLoader;
+	public MapBuffer MapLoader;
 	public Map<String, Boolean> nextMoves;
 
 	private Vector3 touchPos;
@@ -64,8 +64,9 @@ public class DungeonCrawler implements ApplicationListener {
 		// player class defined above
 		player = new Player();
 		// put him in the bottom corner
-		player.pos.set(0,2);
-		MapLoader = new MapBuffer(new LevelThree(this));
+		player.pos.set(0,0);
+		MapLoader = new MapBuffer(this,new VillageMap1(this));//VillageMap1(this));//LevelThree(this));
+        MapLoader.initialLoad();
 		renderer = new HeinousRenderer(this, MapLoader, 1/120f);
 
 		nextMoves = checkNearbyTilesForMovement(player.pos.x, player.pos.y);
@@ -73,7 +74,7 @@ public class DungeonCrawler implements ApplicationListener {
 		// zelda theme, must change
 		theme = Gdx.audio.newMusic(Gdx.files.internal("sfx/church.mp3"));
 		theme.setLooping(true);
-		theme.play();
+		//theme.play();
 
 		// pretty sure this scream was free online for when ghost is found
 		scream = Gdx.audio.newSound(Gdx.files.internal("sfx/scream.mp3"));
@@ -96,6 +97,7 @@ public class DungeonCrawler implements ApplicationListener {
 	 * 	 THIS METHOD LOOKS AT THE LOWEST LAYER FROM TILED AS THE "MOVEABLE" PATH
 	 */
 	public Map<String, Boolean> checkNearbyTilesForMovement(float x, float y) {
+		System.out.println("x: " + x + "  y: " + y);
 		Map<String, Boolean> returnedMap = new HashMap<String, Boolean>();
 		TiledMapTileLayer layer = (TiledMapTileLayer)MapLoader.getCurrentMap().getMap().getLayers().get(0);
 
@@ -201,7 +203,7 @@ public class DungeonCrawler implements ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		updatePlayer(/*System.currentTimeMillis() - originalTime, */deltaTime);
-		MapLoader.getCurrentMap().update(deltaTime);
+		MapLoader.update(deltaTime);
 
 		camera.setToOrtho(false, MapLoader.getCurrentMap().getX(), MapLoader.getCurrentMap().getY());
 		camera.position.x = player.pos.x;
