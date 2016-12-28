@@ -18,30 +18,43 @@ import java.util.Map;
  * Created by User on 12/10/2016.
  */
 
-public class LevelOne extends HeinousMap {
+public class VillageMap1 extends HeinousMap {
 
     private DungeonCrawler game;
-    private boolean keyFound, ghostFound, ringFound;
+    public boolean keyFound, ghostFound, ringFound;
     private TextureRegion ghostTexture, exitTexture;
     private boolean justDied = false;
     private float deathLength = 0f;
     private Vector2[] darkTiles;
     private Vector2[] collidables;
+    private Vector2 lastPosition;
 
-    public LevelOne(DungeonCrawler game) {
-        super(new TmxMapLoader().load("levels/steves3.tmx"));
-        setX(16);
-        setY(9);
+    public VillageMap1(DungeonCrawler game) {
+        super(new TmxMapLoader().load("levels/village-map1.tmx")); //
+        setX(30);
+        setY(15);
         this.game = game;
         ghostTexture = new TextureRegion(new Texture("gfx/ghost.png"), 0, 0, 320, 479);
         exitTexture = new TextureRegion(new Texture("levels/exit.png"), 0, 0, 32, 32);
-        darkTiles = loadDarkTiles();
+        //darkTiles = loadDarkTiles();
         //collidables = loadCollidables();
+    }
+
+    @Override
+    public void onLoad(){
+        VillageInsides insides = new VillageInsides(this.game, this);
+        this.game.MapLoader.loaded.add(insides);
+        doors.add(new DoorLink(this, insides,9,2,32,17));
+        doors.add(new DoorLink(this, insides,16,2,3,18));
+        doors.add(new DoorLink(this, insides,32,2,34,1));
+        doors.add(new DoorLink(this, insides,39,2,5,1));
+        TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(2); //exit Layer
+        layer.setVisible(false);
     }
 
     private Vector2[] loadCollidables() {
         // Collidable Objects (unvisited tiles)
-        TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(1);
+        TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(3);
         layer.setVisible(false);
 
         ArrayList<Vector2> returnedList = new ArrayList();
@@ -73,7 +86,7 @@ public class LevelOne extends HeinousMap {
         return returnedList.toArray(new Vector2[returnedList.size()]);
     }
 
-    public LevelOne(TiledMap input) {
+    public VillageMap1(TiledMap input) {
         super(input);
     }
 
@@ -81,30 +94,35 @@ public class LevelOne extends HeinousMap {
     @Override
     public void renderBackground(SpriteBatch batch) {
         //renderCollidableTiles(batch);
-        renderDarkTiles(batch);
+        //renderDarkTiles(batch);
+        //renderExit(batch, keyFound);
+    }
+
+    public void drawExit(){
+        TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(2); //exit Layer
+        layer.setVisible(true);
     }
 
     private void renderDarkTiles(SpriteBatch batch) {
         TiledMapTileLayer darkLayer = (TiledMapTileLayer)this.getMap().getLayers().get(4);
         for(int i = 0; i < darkTiles.length; i++){
             if(darkTiles[i]!=null){
-                batch.draw(darkLayer.getCell((int)darkTiles[i].x,(int)darkTiles[i].y).getTile().getTextureRegion().getTexture(),darkTiles[i].x,darkTiles[i].y, 1, 1);
+                batch.draw(darkLayer.getCell((int)darkTiles[i].x,(int)darkTiles[i].y).getTile().getTextureRegion(),darkTiles[i].x,darkTiles[i].y, 1, 1);
             }
         }
     }
 
     private void renderCollidableTiles(SpriteBatch batch) {
-        TiledMapTileLayer collidableLayer = (TiledMapTileLayer)this.getMap().getLayers().get(1);
+        TiledMapTileLayer collidableLayer = (TiledMapTileLayer)this.getMap().getLayers().get(3);
         for(int i = 0; i < collidables.length; i++){
             if(collidables[i]!=null){
-                batch.draw(collidableLayer.getCell((int)collidables[i].x,(int)collidables[i].y).getTile().getTextureRegion().getTexture(),collidables[i].x,collidables[i].y, 1, 1);
+                batch.draw(collidableLayer.getCell((int)collidables[i].x,(int)collidables[i].y).getTile().getTextureRegion(),collidables[i].x,collidables[i].y, 1, 1);
             }
         }
     }
 
     @Override
     public void renderForeground(SpriteBatch batch) {
-        renderExit(batch, keyFound);
         renderDeadGhost(batch, ghostFound);
     }
 
@@ -120,7 +138,8 @@ public class LevelOne extends HeinousMap {
                 deathLength = deathLength + deltaTime;
             }
         }
-        clearTile();
+        //clearTile();
+        checkDoors();
         if (game.dead && !justDied){
             game.theme.stop();
             game.scream.play();
@@ -128,9 +147,39 @@ public class LevelOne extends HeinousMap {
         }
     }
 
-    @Override
-    public void onLoad() {
-
+    private void checkDoors() {
+        /*
+        if (game.player.pos.x == 3 && game.player.pos.y == 4){
+            game.player.pos.x = 2;
+            game.player.pos.y = 11;
+            game.nextMoves = game.checkNearbyTilesForMovement(game.player.pos.x,game.player.pos.y);
+        }
+        if (game.player.pos.x == 2 && game.player.pos.y == 12){
+            game.player.pos.x = 3;
+            game.player.pos.y = 3;
+            game.nextMoves = game.checkNearbyTilesForMovement(game.player.pos.x,game.player.pos.y);
+        }
+        if (game.player.pos.x == 26 && game.player.pos.y == 4){
+            game.player.pos.x = 27;
+            game.player.pos.y = 11;
+            game.nextMoves = game.checkNearbyTilesForMovement(game.player.pos.x,game.player.pos.y);
+        }
+        if (game.player.pos.x == 27 && game.player.pos.y == 12){
+            game.player.pos.x = 26;
+            game.player.pos.y = 3;
+            game.nextMoves = game.checkNearbyTilesForMovement(game.player.pos.x,game.player.pos.y);
+        }
+        if (game.player.pos.x == 15 && game.player.pos.y == 4){
+            game.player.pos.x = 12;
+            game.player.pos.y = 6;
+            game.nextMoves = game.checkNearbyTilesForMovement(game.player.pos.x,game.player.pos.y);
+        }
+        if (game.player.pos.x == 12 && game.player.pos.y == 7){
+            game.player.pos.x = 15;
+            game.player.pos.y = 3;
+            game.nextMoves = game.checkNearbyTilesForMovement(game.player.pos.x,game.player.pos.y);
+        }
+        */
     }
 
     @Override
@@ -143,6 +192,7 @@ public class LevelOne extends HeinousMap {
         game.dead = false;
         ghostFound = false;
         keyFound = false;
+        this.getMap().getLayers().get(5).setVisible(false);
         darkTiles = loadDarkTiles();
         collidables = loadCollidables();
     }
@@ -151,8 +201,8 @@ public class LevelOne extends HeinousMap {
      * Clears tiles after visiting them. Includes black tiles and tiles with items
      */
     private void clearTile() {
-        /*
-        TiledMapTileLayer collidableLayer = (TiledMapTileLayer)this.getMap().getLayers().get(1);
+
+        TiledMapTileLayer collidableLayer = (TiledMapTileLayer)this.getMap().getLayers().get(3);
         for(int i = 0; i < collidables.length; i++){
             if(collidables[i] != null && collidables[i].x == game.player.pos.x && collidables[i].y == game.player.pos.y){
                 if (collidableLayer.getCell((int)game.player.pos.x, (int)game.player.pos.y).getTile().getProperties().containsKey("monster")) {
@@ -162,19 +212,19 @@ public class LevelOne extends HeinousMap {
                 } else if (collidableLayer.getCell((int)game.player.pos.x, (int)game.player.pos.y).getTile().getProperties().containsKey("key")) {
                     // boolean is submitted to render method to tell it to draw the exit stairs
                     keyFound = true;
-                } else if (collidableLayer.getCell((int)game.player.pos.x, (int)game.player.pos.y).getTile().getProperties().containsKey("ring")) {
+                } /*else if (collidableLayer.getCell((int)game.player.pos.x, (int)game.player.pos.y).getTile().getProperties().containsKey("ring")) {
                     // boolean is submitted to render method to tell it to add cash
                     ringFound = true;
                     if (ringFound) {
                         ringFound = false;
                         game.player.cash += 5;
                     }
-                }
+                }*/
                 collidables[i] = null;
             }
         }
 
-*/
+
         for(int i = 0; i < darkTiles.length; i++){
             if(darkTiles[i] != null && darkTiles[i].x == game.player.pos.x && darkTiles[i].y == game.player.pos.y){
                 darkTiles[i] = null;
@@ -189,12 +239,12 @@ public class LevelOne extends HeinousMap {
      */
     private void renderExit(SpriteBatch batch, boolean drawExit) {
         if (drawExit) {
-            TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(1);
+            TiledMapTileLayer layer = (TiledMapTileLayer)this.getMap().getLayers().get(3); //exit Layer
+            layer.setVisible(true);
             for (int i = 0; i < getX(); i++) {
                 for (int j = 0; j < getY(); j++) {
                     if (layer.getCell(i, j) != null) {
-                        if (layer.getCell(i, j).getTile().getProperties().containsKey("exit"))
-                            batch.draw(exitTexture, i, j, 1, 1);
+                        batch.draw(layer.getCell(i,j).getTile().getTextureRegion(), i, j, 1, 1);
                     }
                 }
             }

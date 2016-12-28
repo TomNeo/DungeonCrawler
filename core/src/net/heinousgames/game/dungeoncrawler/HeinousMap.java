@@ -3,6 +3,8 @@ package net.heinousgames.game.dungeoncrawler;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
+import java.util.ArrayList;
+
 /**
  * Created by User on 12/11/2016.
  */
@@ -12,6 +14,7 @@ public abstract class HeinousMap {
     public TiledMap map;
     private int x;
     private int y;
+    public ArrayList<DoorLink> doors = new ArrayList<DoorLink>();
 
     public HeinousMap(TiledMap input){
         map = input;
@@ -32,6 +35,8 @@ public abstract class HeinousMap {
     public abstract void renderForeground(SpriteBatch batch);
 
     public abstract void update(float deltaTime);
+
+    public abstract void onLoad();
 
     public void setX(int input){
         x = input;

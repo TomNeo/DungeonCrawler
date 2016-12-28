@@ -49,6 +49,11 @@ public class LevelTwo extends HeinousMap {
     }
 
     @Override
+    public void onLoad() {
+
+    }
+
+    @Override
     public void reset() {
         game.player.pos.x = 0;
         game.player.pos.y = 0;
