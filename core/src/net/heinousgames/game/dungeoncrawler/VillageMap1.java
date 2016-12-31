@@ -21,21 +21,20 @@ import java.util.Map;
 public class VillageMap1 extends HeinousMap {
 
     private DungeonCrawler game;
-    public boolean keyFound, ghostFound, ringFound;
+    public boolean keyFound, ghostFound;
     private TextureRegion ghostTexture, exitTexture;
     private boolean justDied = false;
     private float deathLength = 0f;
     private Vector2[] darkTiles;
     private Vector2[] collidables;
-    private Vector2 lastPosition;
 
     public VillageMap1(DungeonCrawler game) {
-        super(new TmxMapLoader().load("levels/village-map1.tmx")); //
+        super(new TmxMapLoader().load("levels/village-map1.tmx"));
         setX(30);
         setY(15);
         this.game = game;
         ghostTexture = new TextureRegion(new Texture("gfx/ghost.png"), 0, 0, 320, 479);
-        exitTexture = new TextureRegion(new Texture("levels/exit.png"), 0, 0, 32, 32);
+        //exitTexture = new TextureRegion(new Texture("levels/exit.png"), 0, 0, 32, 32);
         //darkTiles = loadDarkTiles();
         //collidables = loadCollidables();
     }

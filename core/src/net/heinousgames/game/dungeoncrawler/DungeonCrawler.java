@@ -231,17 +231,20 @@ public class DungeonCrawler implements ApplicationListener {
 					if (hitActor.getName().equals("up") && nextMoves.get("up")) {
 						System.out.println("UP");
 						playerState = PlayerState.MOVING_UP;
+						isMoving = true;
 					} else if (hitActor.getName().equals("down") && nextMoves.get("down")) {
 						System.out.println("DOWN");
 						playerState = PlayerState.MOVING_DOWN;
+						isMoving = true;
 					} else if (hitActor.getName().equals("left") && nextMoves.get("left")) {
 						System.out.println("LEFT");
 						playerState = PlayerState.MOVING_LEFT;
+						isMoving = true;
 					} else if (hitActor.getName().equals("right") && nextMoves.get("right")) {
 						System.out.println("RIGHT");
 						playerState = PlayerState.MOVING_RIGHT;
+						isMoving = true;
 					}
-					isMoving = true;
 				}
 			}
 		}

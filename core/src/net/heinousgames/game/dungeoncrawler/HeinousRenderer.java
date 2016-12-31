@@ -3,6 +3,7 @@ package net.heinousgames.game.dungeoncrawler;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 /**
@@ -34,8 +35,11 @@ public class HeinousRenderer extends OrthogonalTiledMapRenderer {
         }
     }
 
+    public void setMap(TiledMap value){
+        map = value;
+    }
+
     public void HeinousRender(/*Map<String, Boolean> availableMoves*/){
-        this.map = mapBuffer.getCurrentMap().map;
         render();
         batch.begin();
         mapBuffer.getCurrentMap().renderBackground((SpriteBatch)batch);

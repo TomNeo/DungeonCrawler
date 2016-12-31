@@ -29,6 +29,7 @@ public class MapBuffer {
 
     public void changeMap(HeinousMap nextMap){
         current = nextMap;
+        game.renderer.setMap(this.getCurrentMap().map);
     }
 
     public HeinousMap getCurrentMap(){
